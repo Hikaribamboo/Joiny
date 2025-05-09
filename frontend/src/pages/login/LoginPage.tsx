@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import { Button, Card, Field, Input, Stack, Center } from "@chakra-ui/react"
 import { PasswordInput } from "@/components/ui/password-input"
 import { userAtom } from "@/atoms/userAtom";
 import { useAtom } from "jotai";
 import type { User } from '@/types/user';
+
 
 const LoginPage = () => {
   const [username, setUsername] = useState("")
@@ -12,6 +14,7 @@ const LoginPage = () => {
 
   const [, setUser] = useAtom(userAtom);
 
+  const navigate = useNavigate();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -31,7 +34,8 @@ const LoginPage = () => {
       }
 
       setUser(userInfo)
-      
+      navigate("/")
+
     } else {
       alert("ログインに失敗しました。正しい情報を入力してください")
     }
@@ -60,10 +64,34 @@ const LoginPage = () => {
         </Field.Root>
       </Stack>
     </Card.Body>
-    <Card.Footer justifyContent="flex-end">
-      <Button variant="outline">キャンセル</Button>
-      <Button variant="solid" onClick={handleSubmit}>登録</Button>
-    </Card.Footer>
+    <Center>
+      <Card.Footer justifyContent="flex-end" gap="16">
+        <Button
+          color="red.700"
+          bg="red.100"
+          border="1px solid"
+          borderColor="red.300"
+          borderRadius="md"
+          fontWeight="medium"
+          _hover={{ bg: "red.200" }}
+          onClick={handleSubmit}
+        >
+          キャンセル
+        </Button>
+        <Button
+          color="blue.700"
+          bg="blue.100"
+          border="1px solid"
+          borderColor="blue.300"
+          borderRadius="md"
+          fontWeight="medium"
+          _hover={{ bg: "blue.200" }}
+          onClick={handleSubmit}
+        >
+          登録
+        </Button>
+      </Card.Footer>
+    </Center>
   </Card.Root>
   )
 }
