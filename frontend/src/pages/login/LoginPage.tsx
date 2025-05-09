@@ -1,5 +1,3 @@
-
-=======
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Field, Input, Stack, Center } from "@chakra-ui/react"
@@ -95,7 +93,6 @@ const LoginPage = () => {
       </Card.Footer>
     </Center>
   </Card.Root>
->>>>>>> make-login-page
   )
 }
 
