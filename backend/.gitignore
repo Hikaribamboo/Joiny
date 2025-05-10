@@ -1,1 +1,16 @@
+# node_modules（必須）
+node_modules/
+
+# ビルド成果物
+dist/
+*.js
+*.js.map
+
+# 環境変数
 .env
+
+# TypeScript build
+*.tsbuildinfo
+
+# VSCode設定ファイル
+.vscode/
