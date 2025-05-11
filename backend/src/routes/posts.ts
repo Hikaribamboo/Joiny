@@ -18,17 +18,7 @@ router.get("/", async (res: Response): Promise<void> => {
 });
 
 router.post("/", async (req: Request, res: Response): Promise<void> => {
-
-    let user_id = ""
-    try {
-        const decoded = await verifyToken(req);
-        user_id = decoded.userId;
-        console.log("verified user:", decoded); // ここで userId 使える
-    } catch (err) {
-        console.error(err);
-        res.status(401).json({ error: "Unauthorized" });
-        return;
-    }
+    const user_id = await verifyToken(req);
 
     const { goal_title, goal_detail, is_open }: { goal_title?: string; goal_detail?: string; is_open?:boolean } = req.body;
 
@@ -65,6 +55,82 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
     res.status(201).json(newPost);  // newPostを返す必要があるのか？
 });
 
+router.get("/mine", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user_id = await verifyToken(req);
 
+    const { data: posts, error } = await supabase
+      .from("posts")
+      .select("*")
+      .eq("user_id", user_id);
+
+    if (error) {
+      res.status(500).json({ error: "Database error" });
+      return;
+    }
+
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(401).json({ error: "Unauthorized" });
+  }
+});
+
+// GET /posts/:user_id - 特定ユーザーの投稿取得
+router.get("/:user_id", async (req: Request, res: Response): Promise<void> => {
+    const { user_id } = req.params;
+
+    const { data: posts, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("user_id", user_id);
+
+    if (error) {
+        res.status(500).json({ error: "Database error" });
+        return;
+    }
+
+    res.status(200).json(posts);
+});
+
+// DELETE /posts/:post_id - 投稿削除（要認証・作成者のみ）
+router.delete("/:post_id", async (req: Request, res: Response): Promise<void> => {
+    const { post_id } = req.params;
+        const postIdNum = parseInt(post_id, 10);
+
+    try {
+        const user_id = await verifyToken(req);
+
+        // 投稿が存在し、かつ作成者かどうかを確認
+        const { data: post, error: findError } = await supabase
+            .from("posts")
+            .select("*")
+            .eq("id", postIdNum)
+            .maybeSingle();
+
+        if (findError || !post) {
+            res.status(404).json({ error: "Post not found" });
+            return;
+        }
+
+        if (post.user_id !== user_id) {
+            res.status(403).json({ error: "Forbidden" });
+            return;
+        }
+
+        const { error: deleteError } = await supabase
+            .from("posts")
+            .delete()
+            .eq("id", postIdNum);
+
+        if (deleteError) {
+            res.status(500).json({ error: "Delete failed" });
+            return;
+        }
+
+        res.status(204).send();
+    } catch (err) {
+        res.status(401).json({ error: "Unauthorized" });
+    }
+});
 
 export default router;
