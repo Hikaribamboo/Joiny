@@ -12,7 +12,7 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
 
   if (!username || !password) {
     res.status(400).json({ error: "Username and password are required" });
-    return; // ここで明示的に return
+    return;
   }
 
   const { data, error } = await supabase
@@ -61,7 +61,6 @@ router.post("/signup", async (req: Request, res: Response): Promise<void> => {
     return;
   }
 
-  // ユーザーを作成
   const { data: newUser, error: insertError } = await supabase
     .from("users")
     .insert([{ username, password }])
