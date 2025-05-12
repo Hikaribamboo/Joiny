@@ -1,22 +1,17 @@
+import { createUser } from "@/api/users/users";
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Field, Input, Stack, Center, Flex, Link } from "@chakra-ui/react"
 import { PasswordInput } from "@/components/ui/password-input"
-import { userAtom } from "@/atoms/userAtom";
-import { useAtom } from "jotai";
-import type { User } from '@/types/user';
-
 
 const SignUpPage = () => {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [, setUser] = useAtom(userAtom);
-
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (username && email && password) {
@@ -27,14 +22,13 @@ const SignUpPage = () => {
       const create_at = (`${year}/${month}/${day}`);
       console.log(create_at)
 
-      const userInfo: User = {
-        username: username,
-        email: email,
-        create_at: create_at,
-      }
-
-      setUser(userInfo)
-      navigate("/")
+      try {
+      await createUser(email, password);
+      navigate("/login");
+    } catch (error) {
+      alert("新規登録に失敗しました");
+      console.error(error);
+    }
 
     } else {
       alert("ログインに失敗しました。正しい情報を入力してください")

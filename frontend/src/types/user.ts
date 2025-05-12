@@ -4,7 +4,7 @@ export interface RequestUser {
   }
   
 export interface User {
-username: string;
-email: string;
-create_at: string;
+  username: string;
+  email: string;
+  create_at: string;
 }

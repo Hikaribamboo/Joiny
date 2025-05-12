@@ -1,10 +1,10 @@
+import { login } from "@/api/auth/auth";
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Field, Input, Stack, Center, Flex, Link } from "@chakra-ui/react"
 import { PasswordInput } from "@/components/ui/password-input"
 import { userAtom } from "@/atoms/userAtom";
 import { useAtom } from "jotai";
-import type { User } from '@/types/user';
 
 
 const LoginPage = () => {
@@ -16,7 +16,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (username && email && password) {
@@ -27,14 +27,14 @@ const LoginPage = () => {
       const create_at = (`${year}/${month}/${day}`);
       console.log(create_at)
 
-      const userInfo: User = {
-        username: username,
-        email: email,
-        create_at: create_at,
-      }
-
-      setUser(userInfo)
-      navigate("/")
+      try {
+        const userInfo = await login(email, password);
+        setUser(userInfo);
+        navigate("/");
+      } catch (error) {
+        alert("ログインに失敗しました");
+        console.error(error);
+    }
 
     } else {
       alert("ログインに失敗しました。正しい情報を入力してください")
