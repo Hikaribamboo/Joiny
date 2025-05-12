@@ -3,6 +3,7 @@ import supabase from "../utils/supabase";
 
 const router = express.Router();
 
+// テスト済み
 router.post("/login", async (req: Request, res: Response): Promise<void> => {
   const { email, password }: { email?: string; password?: string } = req.body;
 
@@ -25,6 +26,7 @@ router.post("/login", async (req: Request, res: Response): Promise<void> => {
   res.status(200).json({ id: data.user.id, email: data.user.email });
 });
 
+// テスト済み
 router.post("/signup", async (req: Request, res: Response): Promise<void> => {
   const { email, password, username }: { email?: string; password?: string; username?:string } = req.body;
 

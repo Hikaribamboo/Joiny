@@ -4,11 +4,7 @@ import supabase from "../../utils/supabase";
 const verifyToken = async (req: Request): Promise<string> => {
   const authHeader = req.headers.authorization;
   
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new Error("Unauthorized: Missing token");
-  }
-
-  const token = authHeader.split(" ")[1];
+  const token = authHeader
   console.log("Token: ", token)
 
   const { data, error } = await supabase.auth.getUser(token);

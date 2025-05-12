@@ -4,6 +4,7 @@ import verifyToken from "./function/token";
 
 const router = express.Router();
 
+// テスト済み
 router.get("/", async (req:Request, res: Response): Promise<void> => {
     const { data: allPosts, error: findError } = await supabase
         .from("posts")
@@ -17,6 +18,7 @@ router.get("/", async (req:Request, res: Response): Promise<void> => {
     res.status(200).json(allPosts);
 });
 
+// テスト済み
 router.post("/", async (req: Request, res: Response): Promise<void> => {
     const user_id = await verifyToken(req);
     if (user_id) {console.log("User Id : ", user_id)}
@@ -27,17 +29,12 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
-    const { data:existingPost, error: findError } = await supabase
+    const { error: findError } = await supabase
         .from("posts")
         .select("user_id")
 
     if (findError) {
         res.status(500).json({ error: "Database error" });
-        return;
-    }
-
-    if (existingPost) {
-        res.status(409).json({ error: "This user already has goal" });
         return;
     }
 
@@ -56,6 +53,7 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
     res.status(201).json(newPost);  // newPostを返す必要があるのか？
 });
 
+// テスト済み
 router.get("/mine", async (req: Request, res: Response): Promise<void> => {
   try {
     const user_id = await verifyToken(req);
