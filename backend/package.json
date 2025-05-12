@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch src --ext ts --exec ts-node src/index.ts",
+    "dev": "nodemon index.js",
     "gen:types": "supabase gen types typescript --project-id zxqwitdvuvtsjvsqyzup > src/types/supabase-schema.ts"
   },
   "keywords": [],
@@ -19,13 +19,10 @@
   "devDependencies": {
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^22.15.17",
     "express": "^5.1.0",
     "nodemon": "^3.1.10",
     "supabase": "^2.22.12",
-    "ts-node": "^10.9.2",
-    "tsc-watch": "^6.2.1",
-    "typescript": "^5.8.3"
+    "tsc-watch": "^6.2.1"
   },
   "description": ""
 }
