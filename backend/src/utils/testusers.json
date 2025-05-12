@@ -1,25 +1,5 @@
 [
   {
-    "username": "testuser1",
-    "password": "testpass123",
-    "email": "testuser1@example.com"
-  },
-  {
-    "username": "testuser2",
-    "password": "testpass456",
-    "email": "testuser2@example.com"
-  },
-  {
-    "username": "testuser3",
-    "password": "testpass789",
-    "email": "testuser3@example.com"
-  },
-  {
-    "username": "testuser4",
-    "password": "testpass101",
-    "email": "testuser4@example.com"
-  },
-  {
     "username": "testuser5",
     "password": "testpass102",
     "email": "testuser5@example.com"

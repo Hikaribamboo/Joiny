@@ -23,7 +23,7 @@ const SignUpPage = () => {
       console.log(create_at)
 
       try {
-      await createUser(email, password);
+      await createUser(email, password, username);
       navigate("/login");
     } catch (error) {
       alert("新規登録に失敗しました");

@@ -4,9 +4,10 @@ const ENDPOINT = import.meta.env.VITE_API_ENDPOINT as string;
 
 export const createUser = async (
   email: string,
-  password: string
+  password: string,
+  username: string
 ): Promise<User> => {
-  const response = await fetch(`${ENDPOINT}/users`, {
+  const response = await fetch(`${ENDPOINT}/users/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -14,6 +15,7 @@ export const createUser = async (
     body: JSON.stringify({
       email: email,
       password: password,
+      username: username,
     }),
   });
 
