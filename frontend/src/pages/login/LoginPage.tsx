@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import { Button, Card, Field, Input, Stack, Center } from "@chakra-ui/react"
+import { Button, Card, Field, Input, Stack, Center, Flex, Link } from "@chakra-ui/react"
 import { PasswordInput } from "@/components/ui/password-input"
 import { userAtom } from "@/atoms/userAtom";
 import { useAtom } from "jotai";
@@ -42,10 +42,10 @@ const LoginPage = () => {
   }
 
   return (
-    <Card.Root width="320px" maxW="md">
+    <Card.Root width="400px" padding={4}>
     <Card.Header>
       <Center>
-        <Card.Title>新規登録</Card.Title>
+        <Card.Title >ログイン</Card.Title>
       </Center>
     </Card.Header>
     <Card.Body>
@@ -65,19 +65,8 @@ const LoginPage = () => {
       </Stack>
     </Card.Body>
     <Center>
-      <Card.Footer justifyContent="flex-end" gap="16">
-        <Button
-          color="red.700"
-          bg="red.100"
-          border="1px solid"
-          borderColor="red.300"
-          borderRadius="md"
-          fontWeight="medium"
-          _hover={{ bg: "red.200" }}
-          onClick={handleSubmit}
-        >
-          キャンセル
-        </Button>
+      <Flex gap="4" paddingBottom={4} direction="column">
+        <Link href="../signup">アカウントの作成はこちら</Link>
         <Button
           color="blue.700"
           bg="blue.100"
@@ -88,9 +77,9 @@ const LoginPage = () => {
           _hover={{ bg: "blue.200" }}
           onClick={handleSubmit}
         >
-          登録
+          ログイン
         </Button>
-      </Card.Footer>
+      </Flex>
     </Center>
   </Card.Root>
   )
