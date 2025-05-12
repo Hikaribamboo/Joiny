@@ -143,11 +143,11 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          goal_detail?: string | null
+          goal_detail: string
           goal_title: string
           id?: number
           is_open: boolean
-          user_id?: string
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -172,16 +172,19 @@ export type Database = {
           gender: string | null
           university: string | null
           user_id: string
+          username: string
         }
         Insert: {
           gender?: string | null
           university?: string | null
           user_id?: string
+          username?: string
         }
         Update: {
           gender?: string | null
           university?: string | null
           user_id?: string
+          username?: string
         }
         Relationships: [
           {
@@ -193,18 +196,17 @@ export type Database = {
           },
         ]
       }
-      users: {
+      users_info: {
         Row: {
           created_at: string
           id: string
-          password: string
-          username: string
+          email: string
         }
         Insert: {
           created_at?: string
           id?: string
           password: string
-          username?: string
+          username: string
         }
         Update: {
           created_at?: string

@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 import supabase from "../utils/supabase";
-import verifyToken from "./function/auth";
+import verifyToken from "./function/token";
 
 const router = express.Router();
 
-router.get("/", async (res: Response): Promise<void> => {
+router.get("/", async (req:Request, res: Response): Promise<void> => {
     const { data: allPosts, error: findError } = await supabase
         .from("posts")
         .select("*")
@@ -14,12 +14,12 @@ router.get("/", async (res: Response): Promise<void> => {
         return;
     }
 
-    res.status(201).json(allPosts);
+    res.status(200).json(allPosts);
 });
 
 router.post("/", async (req: Request, res: Response): Promise<void> => {
     const user_id = await verifyToken(req);
-
+    if (user_id) {console.log("User Id : ", user_id)}
     const { goal_title, goal_detail, is_open }: { goal_title?: string; goal_detail?: string; is_open?:boolean } = req.body;
 
     if (!goal_title || !goal_detail || !is_open) {
@@ -43,10 +43,11 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
 
     const { data: newPost, error: insertError } = await supabase
         .from("posts")
-        .insert([{ user_id, goal_title, goal_detail, is_open }])
+        .insert({ user_id, goal_title, goal_detail, is_open })
         .select()
         .single();
 
+        console.log(newPost)
     if (insertError || !newPost) {
         res.status(500).json({ error: "Failed to create post" });
         return;
@@ -92,7 +93,7 @@ router.get("/:user_id", async (req: Request, res: Response): Promise<void> => {
     res.status(200).json(posts);
 });
 
-// DELETE /posts/:post_id - 投稿削除（要認証・作成者のみ）
+
 router.delete("/:post_id", async (req: Request, res: Response): Promise<void> => {
     const { post_id } = req.params;
         const postIdNum = parseInt(post_id, 10);
@@ -100,7 +101,6 @@ router.delete("/:post_id", async (req: Request, res: Response): Promise<void> =>
     try {
         const user_id = await verifyToken(req);
 
-        // 投稿が存在し、かつ作成者かどうかを確認
         const { data: post, error: findError } = await supabase
             .from("posts")
             .select("*")
