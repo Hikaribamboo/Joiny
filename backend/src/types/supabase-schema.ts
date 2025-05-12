@@ -143,11 +143,11 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          goal_detail?: string | null
+          goal_detail: string
           goal_title: string
           id?: number
           is_open: boolean
-          user_id?: string
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -167,49 +167,23 @@ export type Database = {
           },
         ]
       }
-      user_detail: {
-        Row: {
-          gender: string | null
-          university: string | null
-          user_id: string
-        }
-        Insert: {
-          gender?: string | null
-          university?: string | null
-          user_id?: string
-        }
-        Update: {
-          gender?: string | null
-          university?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_detail_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       users: {
         Row: {
           created_at: string
           id: string
-          password: string
+          email: string
           username: string
         }
         Insert: {
           created_at?: string
           id?: string
-          password: string
-          username?: string
+          email: string
+          username: string
         }
         Update: {
           created_at?: string
           id?: string
-          password?: string
+          email: string
           username?: string
         }
         Relationships: []
