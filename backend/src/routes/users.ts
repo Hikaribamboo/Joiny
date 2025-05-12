@@ -1,84 +1,74 @@
 import express, { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import supabase from "../utils/supabase";
-import type { Database } from "../types/supabase-schema";
 
 const router = express.Router();
 
-type User = Database["public"]["Tables"]["users"]["Row"];
-
 router.post("/login", async (req: Request, res: Response): Promise<void> => {
-  const { username, password }: { username?: string; password?: string } = req.body;
+  const { email, password }: { email?: string; password?: string } = req.body;
 
-  if (!username || !password) {
-    res.status(400).json({ error: "Username and password are required" });
+  if (!email || !password) {
+    res.status(400).json({ error: "email and password are required" });
     return;
   }
 
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("username", username)
-    .eq("password", password)
-    .single();
-
-  const user = data as User;
-
-  if (error || !user) {
+  const { data, error } = await supabase.auth.signInWithPassword({"email": email, "password": password});
+  console.log(data)
+  if (error || !data.session?.access_token) {
     res.status(401).json({ error: "Invalid credentials" });
+    console.log(error)
     return;
   }
 
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-    expiresIn: "24h",
-  });
+  const access_token = data.session.access_token;
 
-  res.setHeader("Authorization", `Bearer ${token}`);
-  res.status(200).json({ id: user.id, username: user.username });
+  res.setHeader("Authorization", `Bearer ${access_token}`);
+  res.status(200).json({ id: data.user.id, email: data.user.email });
 });
 
 router.post("/signup", async (req: Request, res: Response): Promise<void> => {
-  const { username, password }: { username?: string; password?: string } = req.body;
+  const { email, password, username }: { email?: string; password?: string; username?:string } = req.body;
 
-  if (!username || !password) {
-    res.status(400).json({ error: "Username and password are required" });
+  if (!email || !password || !username) {
+    res.status(400).json({ error: "email, username and password are required" });
     return;
   }
 
-  const { data: existingUser, error: findError } = await supabase
-    .from("users")
-    .select("id")
-    .eq("username", username)
-    .maybeSingle();
-
+  const { data: existingUsers, error: findError } = await supabase.from("users").select("*").eq("email", email);
+  
   if (findError) {
-    res.status(500).json({ error: "Database error" });
+    res.status(500).json({ error: "Failed to check existing users" });
     return;
   }
 
-  if (existingUser) {
-    res.status(409).json({ error: "Username already exists" });
+  if (existingUsers && existingUsers.length > 0) {
+    res.status(409).json({ error: "Email is already taken" });
     return;
   }
 
-  const { data: newUser, error: insertError } = await supabase
-    .from("users")
-    .insert([{ username, password }])
-    .select()
-    .single();
-
-  if (insertError || !newUser) {
-    res.status(500).json({ error: "Failed to create user" });
-    return;
-  }
-
-  // JWT を発行
-  const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET!, {
-    expiresIn: "24h",
+  const { data: signUpData, error: resisterError } = await supabase.auth.signUp({
+      "email": email,
+      "password": password,
+      options: {
+        data: {
+          username: username
+        }
+      }
   });
 
-  res.setHeader("Authorization", `Bearer ${token}`);
-  res.status(201).json({ id: newUser.id, username: newUser.username });
+  if (resisterError || !signUpData?.user) {
+    console.error("Signup Error:", resisterError);
+    res.status(500).json({ error: "Failed to register user" });
+    return;
+  }
+
+  res.status(201).json({
+    message: "Signup successful. Please log in.",
+    user: {
+      id: signUpData.user.id,
+      email: signUpData.user.email,
+      username
+    }
+  });
 });
 
 export default router;

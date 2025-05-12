@@ -1,43 +1,5 @@
 import { Request } from "express";
 import supabase from "../../utils/supabase";
-import jwt from "jsonwebtoken";
-
-type CreateAccessTokenOptions = {
-  identity: string;  // user idなど
-  expiresIn?: string | number;  // "1h", 3600 など
-  fresh?: boolean;
-  additionalClaims?: Record<string, any>;
-  additionalHeaders?: Record<string, any>;
-};
-
-export function createAccessToken({
-  identity,
-  expiresIn = "1h",
-  fresh = false,
-  additionalClaims = {},
-  additionalHeaders = {}
-}: CreateAccessTokenOptions): string {
-  const payload = {
-    sub: identity,
-    fresh,
-    ...additionalClaims,
-  };
-
-  return jwt.sign(
-  payload,
-  process.env.JWT_SECRET as string,
-  {
-    expiresIn,
-    header: {
-      typ: "JWT",
-      ...additionalHeaders
-    }
-  } as jwt.SignOptions
-);
-;
-
-}
-
 
 const verifyToken = async (req: Request): Promise<string> => {
   const authHeader = req.headers.authorization;

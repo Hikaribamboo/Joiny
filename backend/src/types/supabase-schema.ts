@@ -167,51 +167,23 @@ export type Database = {
           },
         ]
       }
-      user_detail: {
-        Row: {
-          gender: string | null
-          university: string | null
-          user_id: string
-          username: string
-        }
-        Insert: {
-          gender?: string | null
-          university?: string | null
-          user_id?: string
-          username?: string
-        }
-        Update: {
-          gender?: string | null
-          university?: string | null
-          user_id?: string
-          username?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_detail_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      users_info: {
+      users: {
         Row: {
           created_at: string
           id: string
           email: string
+          username: string
         }
         Insert: {
           created_at?: string
           id?: string
-          password: string
+          email: string
           username: string
         }
         Update: {
           created_at?: string
           id?: string
-          password?: string
+          email: string
           username?: string
         }
         Relationships: []
