@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { fetchPublicPosts } from '@/api/posts/public/public'
 import PostCard from './components/PostCard'
 import type { Post } from '@/types/posts'
+import { Wrap } from "@chakra-ui/react"
 
 const PublicPostPage = () => {
     const [publicPosts, setPublicPosts] = useState<Post[]>([])
@@ -22,17 +23,17 @@ const PublicPostPage = () => {
         //     return;
         // }
         getPublicPost();
-    })
+    }, [])
 
   return (
-    <div>
+    <Wrap gap={["12px", "24px"]} justify={["center", "flex-start"]}>
         {publicPosts.map((post, index) => (
             <PostCard 
                 key={index}
                 post={post} 
             />
         ))}
-    </div>
+    </Wrap>
   )
 }
 

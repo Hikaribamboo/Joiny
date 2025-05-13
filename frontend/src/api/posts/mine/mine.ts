@@ -1,4 +1,4 @@
-import type { PushPost } from "@/types/posts";
+import type { PushPost, Post } from "@/types/posts";
 
 const ENDPOINT = import.meta.env.VITE_API_ENDPOINT as string;
 
@@ -14,13 +14,15 @@ export const fetchMyPost = async () => {
       Authorization: `${token}`,
     },
   });
+  // const posts: Post[] = await db.getPostsByUserId(userId); これに変えてみる
 
   if (!response.ok) {
     throw new Error("投稿の取得に失敗しました");
   }
 
-  const myDreams = await response.json();
-  return myDreams;
+  const myPost: Post[] = await response.json();
+  console.log("mypost: ", myPost)
+  return myPost;
 };
 
 export const pushMyPosts = async (post: PushPost) => {
