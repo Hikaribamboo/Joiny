@@ -8,7 +8,6 @@ import { useAtom } from "jotai";
 
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,7 +18,7 @@ const LoginPage = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (username && email && password) {
+    if (email && password) {
       const d = new Date();
       const year = d.getFullYear();
       const month = d.getMonth() + 1;
@@ -30,7 +29,7 @@ const LoginPage = () => {
       try {
         const userInfo = await login(email, password);
         setUser(userInfo);
-        navigate("/");
+        navigate("/posts");
       } catch (error) {
         alert("ログインに失敗しました");
         console.error(error);
@@ -50,10 +49,6 @@ const LoginPage = () => {
     </Card.Header>
     <Card.Body>
       <Stack gap="4" w="full">
-        <Field.Root>
-          <Field.Label>ユーザー名</Field.Label>
-          <Input value={username} onChange={(e) => setUsername(e.target.value)}/>
-        </Field.Root>
         <Field.Root>
           <Field.Label>メールアドレス</Field.Label>
           <Input value={email} onChange={(e) => setEmail(e.target.value)}/>
