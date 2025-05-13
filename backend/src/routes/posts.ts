@@ -30,14 +30,14 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
-    const { error: findError } = await supabase
-        .from("posts")
-        .select("user_id")
+    // const { error: findError } = await supabase
+    //     .from("posts")
+    //     .select("user_id")
 
-    if (findError) {
-        res.status(500).json({ error: "Database error" });
-        return;
-    }
+    // if (findError) {
+    //     res.status(500).json({ error: "Database error" });
+    //     return;
+    // }
 
     const { data: newPost, error: insertError } = await supabase
         .from("posts")
@@ -47,6 +47,7 @@ router.post("/", async (req: Request, res: Response): Promise<void> => {
 
         console.log(newPost)
     if (insertError || !newPost) {
+        console.log(insertError)
         res.status(500).json({ error: "Failed to create post" });
         return;
     }

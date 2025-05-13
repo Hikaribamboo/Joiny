@@ -16,8 +16,6 @@ const verifyToken = async (req: Request): Promise<string> => {
 
   const token = parts[1];
 
-  console.log("Token: ", token)
-
   const { data, error } = await supabase.auth.getUser(token);
 
   if (error || !data.user) {
