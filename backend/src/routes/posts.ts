@@ -12,6 +12,7 @@ router.get("/", async (req:Request, res: Response): Promise<void> => {
 
     if (findError) {
         res.status(500).json({ error: "Database error" });
+        console.log(findError)
         return;
     }
 
