@@ -48,7 +48,7 @@ export type Database = {
           },
         ]
       }
-      group_members: {
+      post_members: {
         Row: {
           created_at: string
           is_approved: string
@@ -72,14 +72,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "group_members_post_id_fkey"
+            foreignKeyName: "post_members_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "posts"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "group_members_user_id_fkey"
+            foreignKeyName: "post_members_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -87,7 +87,7 @@ export type Database = {
           },
         ]
       }
-      group_todos: {
+      post_todos: {
         Row: {
           create_by: string
           created_at: string
@@ -117,14 +117,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "group_todos_create_by_fkey"
+            foreignKeyName: "post_todos_create_by_fkey"
             columns: ["create_by"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "group_todos_post_id_fkey"
+            foreignKeyName: "post_todos_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "posts"

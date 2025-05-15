@@ -1,6 +1,7 @@
 import express from "express";
 import authRouter from "./routes/users";
-import postsRouter from "./routes/posts";
+import publicPostsRouter from "./routes/posts/public";
+import myPostsRouter from "./routes/posts/public";
 import "dotenv/config";
 
 const cors = require('cors');
@@ -17,7 +18,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/users", authRouter); 
-app.use("/posts", postsRouter);
+app.use("/posts/public", publicPostsRouter);
+app.use("/posts/mine", myPostsRouter);
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
